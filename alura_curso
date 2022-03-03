@@ -1,0 +1,258 @@
+
+
+/*
+CRIANDO UMA TABELA NO BANCO  DE DADOS alura. 
+
+tipo DATE ---> YYYY-MM-DD
+tipo TIME ---> HH:MM:SS
+tipo TIMESTAMP --->YYYY-MM-DD HH:MM:SS
+
+*/
+CREATE TABLE aluno(
+	id SERIAL,
+	nome VARCHAR(255),
+	cpf CHAR(11),
+	observação TEXT,
+	idade INTEGER,
+	dinheiro NUMERIC(10,2),
+	altura REAL,
+	ativo BOOLEAN,
+	data_nascimento DATE,
+	hora_aula TIME,
+	matriculado_em TIMESTAMP
+);
+/*
+VISUALIZCANDO A TABELA alunos. 
+*/
+SELECT * FROM aluno;
+
+/*
+INSERINDO DADOS NA TABELA alunos. 
+*/
+
+INSERT INTO aluno (
+	nome,
+	cpf,
+	observação,
+	idade,
+	dinheiro,
+	altura,
+	ativo,
+	data_nascimento,
+	hora_aula,
+	matriculado_em
+) VALUES(
+	'Rodolfo',
+	10987654321,
+	'criando um tabela no curso de PostgreSql da plataforma alura',
+	34,
+	10.70,
+	1.81,
+	TRUE,
+	'1987-06-05',
+	'14:00:00',
+	'2022-03-03 14:00:00'
+);
+
+/*
+VISUALIZAÇÃO DA TABELA.
+*/
+SELECT * FROM aluno
+
+
+/*
+ALTERANDO UM DADO NA TABELA alunos. PARA ISSO PRECISAMOS PRIMEIROS,
+SELECIONAR O DADO QUE QEUREMOS ALTERAR OS VALORES.
+*/
+
+SELECT* FROM  aluno 
+ 	WHERE id = 1
+UPDATE aluno
+ SET 
+ 	nome ='João Pedro',
+	cpf = '12345678910',
+	observação = 'Alterando os valores na tabela aluno.',
+	idade = 4,
+	dinheiro = 11.70,
+	altura = 58.0,
+	ativo= FALSE,
+	data_nascimento = '2021-11-02',
+	hora_aula = '13:36:00',
+	matriculado_em = '2022-03-03 13:37:00'
+WHERE id = 1;
+
+/*
+VISUALIZANDO O DADO
+*/
+SELECT* FROM  aluno 
+
+/*
+DELETANDO O DADO
+*/
+DELETE FROM aluno WHERE id=1;
+/*
+SELECIONANDO COLUNAS NA TABELA.
+*/
+
+SELECT nome,
+	cpf,
+	dinheiro
+FROM aluno;
+/*
+USANDO O ALIAS AS  PARA ALTERAR O NOME DE EXIBIÇÃO. 
+*/
+
+SELECT nome AS "apelido",
+	   cpf AS "cadastro de pessoa física",
+	   dinheiro AS "bufunfa"
+FROM aluno
+
+
+/*
+INSERINDO NOVOS DADOS NA TABELA.
+*/
+
+INSERT INTO aluno (nome) VALUES ('Maria Elisa')
+INSERT INTO aluno (nome) VALUES ('Monique Mello')
+INSERT INTO aluno (nome) VALUES ('Lila Mello')
+INSERT INTO aluno (nome) VALUES ('Jope Mello')
+INSERT INTO aluno (nome) VALUES ('Diogo')
+INSERT INTO aluno (nome) VALUES ('Diego')
+/*
+UTILIZANDO OPERADORES RELACIONAIS E LÓGICOS
+
+1- O IGUAL (=)  ----> é exatamente igual não pode ter nada diferente usado tanto para campos
+de números como texto.
+2- O DIFERENTE <> ou != ----> é usado para filtrar todos que não declaramos.
+3- O LIKE -----> é quando quer selecionar valores pareceidos com a declaração.
+4- O NOT LIKE  ----> É negaçõ do LIKE.
+5- O IS -----> utlizados para campos numéricos para uma igualdade da experessão.
+6- IS NOT ----> O oposto de IS.
+7- O >= ou <= operadores matemáticos maior ou igual que  e menor ou igual que.
+8- O > e  <  maior que  e menor que.
+9- BETWEEN ---> resultado entre dois valores declarados.
+10- AND -----> operador relacional entre duas ou mais declarações com obrigatoriedade de 
+todas as declarações serem VERDADE.
+11- OR -----> operdor relacional entre duas ou mais declarações com obrigatoriedade de apenas
+uma ser VERDADE.
+
+### Caracteres especiais
+1- O underline _ ----> quer dizer qualquer caracter naquela posição.
+2- O porcentagem % -----> Substitui o caracter ate o espaço que ocupa.
+*/
+
+SELECT * FROM aluno WHERE nome = 'Rodolfo'
+SELECT * FROM aluno WHERE nome <> 'Rodolfo'
+SELECT * FROM aluno WHERE nome != 'Rodolfo'
+SELECT * FROM aluno WHERE nome LIKE 'Di_go'
+SELECT * FROM aluno WHERE nome NOT LIKE 'Rodolfo'
+SELECT * FROM aluno WHERE nome LIKE 'D%'
+SELECT * FROM aluno WHERE nome LIKE  '%%'
+SELECT * FROM aluno WHERE nome LIKE '%a'
+SELECT * FROM aluno WHERE cpf IS NULL
+SELECT * FROM aluno WHERE cpf IS NOT NULL
+SELECT * FROM aluno WHERE idade = 34
+SELECT * FROM aluno WHERE idade >= 34
+SELECT * FROM aluno WHERE idade <= 34
+SELECT * FROM aluno WHERE dinheiro > 9.45
+SELECT * FROM aluno WHERE dinheiro < 10.70
+SELECT * FROM aluno WHERE dinheiro BETWEEN 10.00 AND 20.00
+SELECT * FROM aluno WHERE nome = 'Rodolfo' AND cpf IS NOT NULL
+SELECT * FROM aluno WHERE nome = 'Rodolfo' OR cpf IS NULL
+
+/*
+ENTENDO O USO DE CHAVES PRIMÁRIAS.
+
+-----> "uma coluna, ou grupo de colunas, que pode ser usada para 
+		identificar uma linha da tabela"<---------
+		
+CRIANDO UMA NOVA TABELA  cursos 
+INFORMAREMOS QUE OS CAMPOS NÃO RECEBERAM VALORES NULOS --- NULL
+*/
+
+CREATE TABLE curso(
+	id INTEGER NOT NULL,
+	nome VARCHAR(255) NOT NULL
+);
+
+/*
+INSERINDO NOVOS VALORES NA TABELA curso
+*/
+
+INSERT INTO curso (id, nome) VALUES (1 ,'HTML')
+INSERT INTO curso (id, nome) VALUES (1, 'JAVASCRIPT')
+
+SELECT*FROM curso
+
+/*
+PARA EVITAR QUE O MESMO id SEJA USADO PRA DIFERENTES CURSOS VAMOS
+USAR O UNIQUE.
+*/
+DROP TABLE curso
+CREATE TABLE curso(
+	id INTEGER NOT NULL UNIQUE,
+	nome VARCHAR(255) NOT NULL
+);
+
+INSERT INTO curso (id, nome) VALUES (1 ,'HTML')
+INSERT INTO curso (id, nome) VALUES (2, 'JAVASCRIPT')
+
+SELECT * FROM curso
+
+/*
+AGORA QUE colocamos id como uma NOT NULL UNIQUE, TEMOS ENTÃO AS MESMAS
+CARACTERÍSTICAS DE UMA CHAVE PRIMÁRIA ( PRIMARY KEY).
+*/
+DROP TABLE curso
+CREATE TABLE curso(
+	id INTEGER PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL
+);
+INSERT INTO curso (id, nome) VALUES (1 ,'HTML')
+INSERT INTO curso (id, nome) VALUES (2, 'JAVASCRIPT')
+
+
+/*
+CRIANDO UMA NOVA TABELA ALUNO E INSERINDO VALORES NELA.
+*/
+DROP TABLE aluno
+CREATE TABLE aluno(
+	id SERIAL PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL
+);
+
+INSERT INTO aluno(nome) VALUES('Charles')
+INSERT INTO aluno(nome) VALUES ('Vinícius')
+SELECT*FROM aluno
+
+/*
+CRIANDO UMA NOVA TABELA PARA RELACIONAR A TABELA aluno e curso.
+*/
+
+CREATE TABLE aluno_curso(
+	aluno_id INTEGER,
+	curso_id INTEGER,
+	PRIMARY KEY(aluno_id, curso_id)
+);
+
+INSERT INTO aluno_curso (aluno_id,curso_id) VALUES (3,3)
+SELECT*FROM aluno_curso
+/*
+NOTE QUE PODEMOS INSERIR NA TABELA aluno_curso NOMES E CURSOS QUE NÃO EXISTEM NAS TABELAS
+aluno e curso. PARA EVITAR ESSE PROBLEMA E NÃO PERMITIR QUE HAJA INCONSISTENCIA NO BANCO DE 
+DADOS VAMOS UTILIZAR A CHAVE ESTRANGEIRA - FOREING KEY-
+*/
+
+DROP TABLE aluno_curso
+
+CREATE TABLE aluno_curso(
+	aluno_id INTEGER,
+	curso_id INTEGER,
+	PRIMARY KEY(aluno_id, curso_id),
+	FOREIGN KEY(aluno_id),
+	REFERENCES aluno (id),
+	FOREIGN KEY (curso_id),
+	REFERENCES curso (id)
+)
+
+
