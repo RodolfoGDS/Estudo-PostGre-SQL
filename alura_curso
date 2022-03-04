@@ -249,10 +249,228 @@ CREATE TABLE aluno_curso(
 	aluno_id INTEGER,
 	curso_id INTEGER,
 	PRIMARY KEY(aluno_id, curso_id),
-	FOREIGN KEY(aluno_id),
+	FOREIGN KEY(aluno_id)
 	REFERENCES aluno (id),
-	FOREIGN KEY (curso_id),
+	FOREIGN KEY (curso_id)
 	REFERENCES curso (id)
 )
 
+SELECT * FROM aluno_curso
 
+/*
+INSERINDO 3 ALUNOS NO CURSO 1 (HTML) NA TABELA aluno_curso. NOTE QUE O aluno_id = 3 não existe,
+logo ele vai apresentar um erro. Validadno assim o funcionamento da chave estrangeira.
+*/
+
+INSERT INTO aluno_curso (aluno_id,curso_id) VALUES (1,1);
+INSERT INTO aluno_curso (aluno_id,curso_id) VALUES (2,1);
+INSERT INTO aluno_curso (aluno_id,curso_id)	VALUES (3,1);
+
+/*
+Agora vamos aprender como juntar tabelas em uma consulta. 
+Para consultar um aluno ou um curso nas tabelas aluno e curso, usamos.....
+
+'''
+
+SELECT * FROM aluno  WHERE id = (número do aluno)
+SELECT * FROM curso  WHERE id = (número do curso)
+
+'''
+Para trazer em uma única query usamos o JOIN --> comando que une dados existentes
+na tabela A com dados existentes na tabela B.
+
+*/
+
+
+SELECT * FROM aluno
+	JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+
+/*
+INSERINDO O ALUNO 2 NO CURSO 2.
+*/
+
+INSERT INTO aluno_curso(aluno_id, curso_id) VALUES (2,2)
+INSERT INTO aluno_curso(aluno_id, curso_id) VALUES (3,1)
+/*
+Agora podemos também adcionar o nome do curso 
+*/
+SELECT * FROM aluno
+	JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+	JOIN curso ON curso.id = aluno_curso.curso_id
+	
+/*
+Só os nomes dos alunos e dos cursos. 
+*/
+
+SELECT aluno.nome aluno,
+	   curso.nome as curso
+	FROM aluno
+	JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+	JOIN curso ON curso.id = aluno_curso.curso_id
+	
+/*
+Mudando os nomes das colunas
+*/
+
+SELECT aluno.nome as "Nome do Aluno",
+	   curso.nome as "Nome do curso"
+	 FROM aluno
+	 JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+	 JOIN curso ON curso.id = aluno_curso.curso_id
+	 
+/*
+Registrando um aluno na tabela de aluno
+*/
+
+INSERT INTO aluno (nome) VALUES ( 'Nico');
+
+/*
+Retornando aluno e cursos. Note que o aluno que inserimos por ultimo nao retorna na consulta.
+Isso ocorre porque ele não está inscrito em nenhum curso.
+*/
+
+SELECT aluno.nome as "Nome do Aluno",
+	   curso.nome as "Nome do curso"
+	 FROM aluno
+	 JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+	 JOIN curso ON curso.id = aluno_curso.curso_id
+
+/*
+Registrando um curso na tabela curso
+*/
+
+
+INSERT INTO curso (id,nome) VALUES (3, 'CSS')
+
+/*
+Retornando aluno e cursos. Note que o curso CSS que inserimos por ultimo nao retorna na consulta.
+Isso ocorre porque ninguem está inscrito no curso.
+*/
+
+SELECT aluno.nome as "Nome do Aluno",
+	   curso.nome as "Nome do curso"
+	 FROM aluno
+	 JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+	 JOIN curso ON curso.id = aluno_curso.curso_id
+/*
+Agora vamos aprender como juntar tabelas quando há informações faltando como no caso a cima.
+
+1- LEFT JOIN: existe um dado na tabela da esquerda, mas não existe na tabela da direita.
+2- RGIGHT JOIN : existe um dado na tabela da direita, mas não existe na tabela da esquerda.
+3- FULL JOIN: não importa se o dado está na tabela da direita ou da esquerda.
+4- CROSS JOIN: não precisa de um campo para realizar vínculo, multiplica os dados da tabela A pela B.
+*/	 
+
+SELECT aluno.nome as "Nome do Aluno",
+	   curso.nome as "Nome do Curso"
+	 FROM aluno
+LEFT JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+LEFT JOIN curso ON curso.id = aluno_curso.curso_id
+
+
+SELECT aluno.nome as "Nome do Aluno",
+	   curso.nome as "Nome do Curso"
+	FROM aluno
+RIGHT JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+RIGHT JOIN curso ON curso.id = aluno_curso.curso_id
+
+
+SELECT aluno.nome as "Nome do Aluno",
+	   curso.nome as "Nome do Curso"
+	FROM aluno
+FULL JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+FULL JOIN curso ON curso.id = aluno_curso.curso_id
+
+
+SELECT aluno.nome as "Nome do Aluno",
+	   curso.nome as "Nome do Curso"
+	FROM aluno 
+CROSS JOIN curso
+
+INSERT INTO aluno (nome) VALUES ('João')
+
+
+/*
+Restrição de chave estrangeira
+*/
+
+SELECT* FROM aluno
+SELECT* FROM aluno_curso
+SELECT * FROM curso
+
+/*
+Vamos tentar deletar um dado. Note que ira ocorrer um erro, pois nao podemos apagar o 
+aluno dessa tabela, pois ela existe em uma outra tabela e isso impede que ele seja deletado
+*/
+
+DELETE FROM  aluno WHERE id=1;
+
+
+/*
+Agora precisamos deletar o aluno e depois ele deve ser excluido de todas as tabelas em que 
+ele existe. Quando passamos o FOREIGN KEY , o padrão dele é o comando ON DELETE RESTRICT,
+ou seja, a chave estrangeira restringe o apagamento dos dados. Para alterar isso basta 
+mudar o padrão para ON DELETE CASCADE, assim o registro do aluno será apagado de todas a tabelas.
+*/
+
+DROP TABLE aluno_curso
+CREATE TABLE aluno_curso(
+		aluno_id INTEGER,
+		curso_id INTEGER,
+	PRIMARY KEY (aluno_id, curso_id),
+	
+	FOREIGN KEY (aluno_id)
+	REFERENCES aluno(id)
+	ON DELETE CASCADE,
+	
+	FOREIGN KEY (curso_id)
+	REFERENCES curso(id)
+);
+
+INSERT INTO aluno_curso(aluno_id, curso_id)VALUES(1,1);
+INSERT INTO aluno_curso(aluno_id, curso_id)VALUES(2,1);
+INSERT INTO aluno_curso(aluno_id, curso_id)VALUES(3,1);
+INSERT INTO aluno_curso(aluno_id, curso_id)VALUES(1,3);
+
+
+SELECT aluno.nome as "Nome do aluno",
+	   curso.nome as "Nome do curso"
+	FROM aluno
+	JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+	JOIN curso 	ON curso.id = aluno_curso.curso_id
+/*
+Agora precisamos fazer um update  e depois ele deve ser feito em todas as tabelas em que 
+ele existe. Quando passamos o FOREIGN KEY , o padrão dele é o comando ON UPDATE RESTRICT,
+ou seja, a chave estrangeira restringe a alteração dos dados. Para alterar isso basta 
+mudar o padrão para ON UPDATE CASCADE, assim o registro do aluno será alterado de todas a tabelas.
+*/
+
+DROP TABLE aluno_curso
+CREATE TABLE aluno_curso(
+		aluno_id INTEGER,
+		curso_id INTEGER,
+	PRIMARY KEY (aluno_id, curso_id),
+	
+	FOREIGN KEY (aluno_id)
+	REFERENCES aluno(id)
+	ON DELETE CASCADE
+	ON UPDATE CASCADE,
+	
+	FOREIGN KEY (curso_id)
+	REFERENCES curso(id)
+);
+
+INSERT INTO aluno_curso(aluno_id, curso_id)VALUES(1,1);
+INSERT INTO aluno_curso(aluno_id, curso_id)VALUES(2,1);
+INSERT INTO aluno_curso(aluno_id, curso_id)VALUES(3,1);
+INSERT INTO aluno_curso(aluno_id, curso_id)VALUES(1,3);
+
+/*
+Agora vaos alterar os dados de forma a não ocorrer erro. vamos trocar o id de João que é 4 
+para um id = 20
+*/
+SELECT * FROM aluno
+
+
+UPDATE aluno
+	SET id = 20 WHERE id = 4
