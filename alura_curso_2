@@ -1,0 +1,31 @@
+/* O banco de dados alura já foi criado no script anterior, vamos colocar aqui as tabelas com o final _2*/
+
+
+CREATE TABLE aluno_2(
+	id SERIAL PRIMARY KEY,
+	primeiro_nome VARCHAR(255) NOT NULL,
+	ultimo_nome VARCHAR(255) NOT NULL,
+	data_de_nascimento DATE NOT NULL
+);
+
+CREATE TABLE categoria (
+	id SERIAL PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL
+);
+
+
+
+CREATE TABLE curso_2 (
+	id SERIAL PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL,
+	categoria_id INTEGER NOT NULL REFERENCES categoria(id)
+);
+
+/* Criando uma tabela relacional entre as tabelas aluno e curso */
+DROP TABLE aluno_curso_2
+CREATE TABLE aluno_curso_2(
+	aluno_id INTEGER NOT NULL REFERENCES aluno_2(id),
+	curso_id INTEGER NOT NULL REFERENCES curso_2(id),
+	PRIMARY KEY (aluno_id, curso_id)
+);
+
