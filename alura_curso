@@ -474,3 +474,98 @@ SELECT * FROM aluno
 
 UPDATE aluno
 	SET id = 20 WHERE id = 4
+	
+
+
+/*
+Segunda parte do treinamento: Views, Sub-consultas e Funções
+*/
+
+
+/* Vamos começar fazendo o DROP TABLE do que já foi criado */
+
+DROP TABLE aluno, curso, aluno_curso, categoria
+
+
+/*  Vamos recriar as tabelas para estar adequado a continuidade do curso */
+
+
+CREATE TABLE aluno (
+ 	id SERIAL PRIMARY KEY,
+	primeiro_nome VARCHAR(255) NOT NULL,
+	ultimo_nome VARCHAR(255) NOT NULL,
+	data_nascimento DATE NOT NULL
+);
+
+
+/*
+Vamos criar uma tabela categoria e ampliar o banco de dados.
+*/
+
+
+DROP TABLE curso
+CREATE TABLE curso (
+	id SERIAL PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL,
+	categoria_id INTEGER NOT NULL REFERENCES categoria(id)
+);
+SELECT*FROM curso
+
+
+
+CREATE TABLE categoria (
+	id SERIAL PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL
+);
+
+SELECT*FROM categoria
+
+
+
+
+
+CREATE TABLE aluno_curso(
+	aluno_id INTEGER NOT NULL REFERENCES aluno(id),
+	curso_id INTEGER NOT NULL REFERENCES curso(id),
+	PRIMARY KEY (aluno_id, curso_id)
+);
+
+
+
+
+/* Vamos adcionar varios valores na tabela aluno usando uma nova sintaxe, apenas um INSERT INTO */
+select*from aluno
+INSERT INTO aluno (primeiro_nome, ultimo_nome, data_nascimento) 
+			VALUES('Vinicius', 'Dias', '1997-10-15'), 
+				  ('Patrícia', 'Freitas', '1996-10-25'),
+				  ('Diogo', 'Oliveira', '1994-08-27'),
+				  ('Maria', 'Rosa', '1985-01-01');
+
+/* Vamos fazer o mesmo com a tabela categoria */
+
+INSERT INTO categoria (nome) VALUES ('Front-end'), ('Programação'), ('Banco de Dados'), ('Data Science');
+SELECT*FROM curso
+
+/* Agora vamos inserir os cursos e seus nomes */
+
+INSERT INTO curso (nome, categoria_id) VALUES 
+					('HTML',1),
+					('CSS',1),
+					('JS',1),
+					('PHP',2),
+					('Java',2),
+					('C++',2),
+					('PostgreSQL',3),
+					('MySQL',3),
+					('Oracle',3),
+					('SQL Server',3),
+					('SQLite',3),
+					('Pandas',4),
+					('Machine Learning',4),
+					('Power BI',4);
+					
+/* Agora vamos começar a fazer um relatorio com os alunos matriculados em mais cursos.*/
+
+
+
+
