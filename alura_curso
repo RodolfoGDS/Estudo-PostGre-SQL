@@ -563,8 +563,69 @@ INSERT INTO curso (nome, categoria_id) VALUES
 					('Pandas',4),
 					('Machine Learning',4),
 					('Power BI',4);
-					
+				
+				
+/* Agora vamos matricular os alunos nos cursos usando o INSERT na tabela aluno_curso. */
+
+INSERT INTO aluno_curso VALUES (1,4),(1,11),(2,1),(2,2),(3,4),(3,3),(4,4),(4,6),(4,5);
+
 /* Agora vamos começar a fazer um relatorio com os alunos matriculados em mais cursos.*/
+
+
+SELECT * FROM aluno
+SELECT * FROM aluno_curso
+
+/*  Para realizarmos o relacionamento das tabelas "aluno" e "aluno_curso", é necessário 
+informarmos qual campo de "aluno_curso" referencia qual campo de "aluno" */
+
+SELECT *
+    FROM aluno
+    JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id;
+
+/* Agora temos que retornar os dados dos cursos. */
+
+SELECT *
+	FROM aluno
+	JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id
+	JOIN curso ON curso.id = aluno_curso.curso_id;
+
+/* Agora vamos simplificar a query e passar apenas o necessário.
+   Da tabela aluno só interessa o primeiro_nome e ultimo_nome,
+   na tabela curos precisamos saber o número de cursos que cada,
+   aluno está fazendo vamos usar a função COUNT().
+*/
+
+SELECT  aluno.primeiro_nome, aluno.ultimo_nome,
+		COUNT(curso.id) numero_de_cursos
+	FROM aluno
+	JOIN aluno_curso ON aluno_curso.aluno_id=aluno.id
+	JOIN curso ON curso.id = aluno_curso.curso_id
+GROUP BY aluno.primeiro_nome, aluno.ultimo_nome;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
+
 
 
 
